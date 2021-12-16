@@ -21,7 +21,7 @@ module.exports = {
         if (Soption == "pertubacao_c") Soption = "Membro está pertubando no chat."
         if (Soption == "pertubacao_d") Soption = "Membro está pertubando na dm."
         if (Soption == "i_conteudo") Soption = "Membro está divulgando conteúdos inapropiados."
-        if (Soption == "desrrespeito") Soption = "Membro está sendo desrrespeitoso."
+        if (Soption == "desrespeito") Soption = "Membro está sendo desrespeitoso."
 
         interaction.reply({ embeds: [
             new MessageEmbed()
@@ -69,7 +69,7 @@ module.exports = {
                 .addChoice("Pertubação no Chat", "pertubacao_c")
                 .addChoice("Pertubação na DM", "pertubacao_d")
                 .addChoice("Conteúdo Inapropiado", "i_conteudo")
-                .addChoice("Desrrespeito", "desrrespeito")
+                .addChoice("Desrespeito", "desrespeito")
         ),
     
     help: {

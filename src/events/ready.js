@@ -9,7 +9,7 @@ module.exports.run = (bot) => {
 
     setInterval(() => {
         bot.user.setPresence({
-            activities: [ { type: "WATCHING", name: `${atividade[periodo++ % atividade.length]}` } ],
+            activities: [ { type: "PLAYING", name: `${atividade[periodo++ % atividade.length]}` } ],
             status: "idle"
         })
     }, 20000)
