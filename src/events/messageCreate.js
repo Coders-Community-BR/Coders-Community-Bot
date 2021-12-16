@@ -1,4 +1,4 @@
-const { guild_informations: { staff_id, able_channels_id, sugest_channel } } = require("../config/client/client-info"),
+const { guild_informations: { staff_id, able_channels_id, sugest_channels } } = require("../config/client/client-info"),
     { MessageEmbed } = require("discord.js"),
     { Clear, Dark, Other } = require("../config/client/client-colors"),
     { Aviso } = require("../config/client/client-reports")
@@ -46,7 +46,7 @@ module.exports.run = (message, bot) => {
         }
     }
 
-    if (message.channel.id == sugest_channel) {
+    if (sugest_channels.includes(message.channel.id)) {
         message.react("👍")
         message.react("👎")
     }
