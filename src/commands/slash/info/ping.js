@@ -9,6 +9,8 @@ module.exports = {
                 .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setColor(Clear.Green)
                 .setTitle("🏓 Pong!")
+                .setTimestamp()
+                .setThumbnail("https://cdn.dribbble.com/users/106600/screenshots/2568106/wifi_2x.gif")
                 .setDescription(`> Meu ping está em : **${Math.round(bot.ws.ping)}ms**\n> Latência da APi : **${interaction.createdTimestamp - Date.now()}ms**`)
                 .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
         ], ephemeral: false })
