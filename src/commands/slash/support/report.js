@@ -73,7 +73,7 @@ module.exports = {
         ),
     
     help: {
-        status: "building", // building, running, stopped
+        status: "running", // building, running, stopped
         details: "Esse comando oferece uma forma eficaz de alertar a staff da Coders Community sobre algum problema que está ocorrendo dentro do servidor. Se usado incorretamente, o banimento poderá ser aplicado."
     }
 }
