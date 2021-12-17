@@ -9,7 +9,7 @@ bot.select_menus = new Collection();
 
 let dir_events = resolve(__dirname, "./events");
 let dir_slash_commands = resolve(__dirname, "./commands/slash");
-let dir_select_menus = resolve(__dirname, "./commands/select_menus")
+let dir_select_menus = resolve(__dirname, "./commands/select_menus");
 
 readdir(dir_events, (err, files) => {
     if(err) return console.log("│ ERRO │ Foi detectado um erro na leitura da pasta events");
@@ -63,6 +63,6 @@ readdir(dir_select_menus, (err, files) => {
 
         bot.select_menus.set(Custom_Id, { Custom_Id, run })
     })
-})
+});
 
 bot.login(token)
