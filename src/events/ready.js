@@ -1,9 +1,13 @@
+const { guild_informations: { id } } = require("../config/client/client-info")
+
 module.exports.run = (bot) => {
     console.log("│ GOOD │ Estou à disposição para Coders Community!");
 
+    const guild = bot.guilds.cache.get(id)
+
     let atividade = [
         `Coders Community`,
-        `${bot.users.cache.size} membros`
+        `${guild.memberCount} membros`
     ];
     let periodo = 0;
 

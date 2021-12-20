@@ -1,35 +1,13 @@
 const { SlashCommandBuilder } = require("@discordjs/builders"),
     { MessageEmbed } = require("discord.js"),
-    { Other } = require("../../../config/client/client-colors")
+    { Other } = require("../../../config/client/client-colors"),
+    moment = require("moment");
 
 module.exports = {
     run: (interaction, bot) => {
-        const Days= [
-            "Segunda",
-            "Terça",
-            "Quarta",
-            "Quinta",
-            "Sexta",
-            "Sábado",
-            "Domingo"
-        ];
-        const Month = [
-            'janeiro',
-            'fevereiro',
-            'março',
-            'abril',
-            'maio',
-            'junho',
-            'julho',
-            'agosto',
-            'setembro',
-            'outubro',
-            'novembro',
-            'dezembro'
-        ];
 
         let GuildName = interaction.guild.name;
-        let CreatedAt = Days[interaction.guild.createdAt.getDay() - 1] + ", " + (interaction.guild.createdAt.getDate() < 10 ? "0" + interaction.guild.createdAt.getDate() : interaction.guild.createdAt.getDate()) + " " +  Month[interaction.guild.createdAt.getMonth()]  + " de " + interaction.guild.createdAt.getFullYear();
+        let CreatedAt = moment(interaction.guild.createdAt).format("LLL");
         let GuildId = interaction.guild.id;
         let Criador = () => {
             const owner = interaction.guild.members.cache.get(interaction.guild.ownerId)
@@ -55,7 +33,7 @@ module.exports = {
                     {name: `👥 Número de Membros`, value: "`" + NumeroMembros + "`", inline: true},
                     {name: `🎫 Total de Canais`, value: "`" + CanaisTotais + "`", inline: true},
                     {name: `🇧🇷 Linguagem Utilizada`, value: "`" + Lingua + "`", inline: true},
-                    {name: `🌠 Nivel de Impulso`, value: "`" + LevelBooster + "`", inline: true},
+                    {name: `🌠 Nível de Impulsão`, value: "`" + LevelBooster + "`", inline: true},
                     {name: `🦸‍♂️ Quantidade de Impulsionadores`, value: "`" + NumeroAssinaturas + "`", inline: true},
                 )
                 .setThumbnail(`https://cdn.discordapp.com/icons/${interaction.guild.id}/${interaction.guild.icon}.png`)
