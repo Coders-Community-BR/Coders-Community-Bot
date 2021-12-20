@@ -63,6 +63,9 @@ module.exports = {
             if (roles.includes("Contribuidor")) {
                 return "Booster da Coders Comumnity";
             }
+            if (roles.includes("Bot da Coders")) {
+                return "Bot Original da Coders Community"
+            }
             if (roles.includes("BOTS Oficiais")) {
                 return "Bot da Coders Comumnity";
             }
