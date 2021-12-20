@@ -97,7 +97,7 @@ module.exports = {
                     /*{name: , value: , inline: true}*/
                 )
                 .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
-        ], ephemeral: true })
+        ], ephemeral: false })
     },
     
     builder: new SlashCommandBuilder()
