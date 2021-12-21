@@ -96,7 +96,7 @@ module.exports = {
         ),
     
     help: {
-        status: "running", // building, running, stopped
+        status: "building", // building, running, stopped
         details: "Esse comando é restrito a Staff da Coders Community. Ele executa o ban de membros desse servidor, quando solicitado."
     }
 }
