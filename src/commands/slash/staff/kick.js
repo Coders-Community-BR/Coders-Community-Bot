@@ -1,18 +1,14 @@
 const { SlashCommandBuilder } = require("@discordjs/builders"),
     { MessageEmbed } = require("discord.js"),
-    { Aviso, Alerta } = require("../../../config/client/client-reports"),
     { guild_informations: { staff_id, punishment_channel }, bot_informations: { id } } = require("../../../config/client/client-info"),
-    { Clear, Other } = require("../../../config/client/client-colors")
+    { Alerta } = require("../../../config/client/client-reports"),
+    { Clear, Other } = require("../../../config/client/client-colors");
 
 module.exports = {
     run: async (interaction ,bot) => {
         let Channel = interaction.guild.channels.cache.find(channel => channel.id == punishment_channel)
         const member = interaction.options.get("membro");
         const reason = interaction.options.get("reason").value;
-        let days = interaction.options.get("days");
-        if (days) days = interaction.options.get("days").value;
-        if (days > 7 || days < 0) return interaction.reply({content: "**❌ Somente são suportados valores entre 0 e 7 para a categoria 'days'**"})
-        if (!days) days = 0
 
         if (!staff_id.includes(interaction.user.id)) {
             return interaction.reply({ embeds: [
@@ -25,14 +21,14 @@ module.exports = {
                     .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
             ], ephemeral: true });
         } else {
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) {
+            if (!interaction.member.permissions.has("KICK_MEMBERS")) {
                 return interaction.reply({ embeds: [
                     new MessageEmbed()
                         .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                         .setColor(Clear.Red)
                         .setTitle(Alerta)
                         .setTimestamp()
-                        .setDescription(`> **Desculpe ${interaction.user.username}, mas você não possui permissão para banir membros desse servidor.**`)
+                        .setDescription(`> **Desculpe ${interaction.user.username}, mas você não possui permissão para expulsar membros desse servidor.**`)
                         .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
                 ], ephemeral: true });
             } else {
@@ -43,7 +39,7 @@ module.exports = {
                             .setColor(Clear.Red)
                             .setTitle(Alerta)
                             .setTimestamp()
-                            .setDescription(`> **Desculpe ${interaction.user.username}, mas não tenho permissões para banir membros da staff.**`)
+                            .setDescription(`> **Desculpe ${interaction.user.username}, mas não tenho permissões para expulsar membros da staff.**`)
                             .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
                     ], ephemeral: true });
                 }
@@ -54,22 +50,22 @@ module.exports = {
                             .setColor(Clear.Red)
                             .setTitle(Alerta)
                             .setTimestamp()
-                            .setDescription(`> **Desculpe ${interaction.user.username}, mas não posso simplesmente me banir.**`)
+                            .setDescription(`> **Desculpe ${interaction.user.username}, mas não posso simplesmente me expulsar.**`)
                             .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
                     ], ephemeral: true });
                 }
 
-                await member.member.ban({ days: days, reason: reason});
-                
-                interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi banido com sucesso.**", ephemeral: true })
+                await member.member.kick({ reason: reason });
+
+                interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi expulso com sucesso.**", ephemeral: true })
                 Channel.send({ embeds: [
                     new MessageEmbed()
                         .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                         .setColor(Other.MediumBlue)
-                        .setTitle("🚫 Novo Usuário Banido")
+                        .setTitle("🚫 Novo Usuário Expulso")
                         .setThumbnail(member.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
                         .setTimestamp()
-                        .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\` \n> **Dias de Mensagens Apagadas:** \`${days}\``)
+                        .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\``)
                         .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))                    
                 ] });
             }
@@ -77,26 +73,21 @@ module.exports = {
     },
     
     builder: new SlashCommandBuilder()
-        .setName("ban")
-        .setDescription("〔👑 Staff〕 Restrito à equipe da Staff. Bane membros do servidor.")
+        .setName("kick")
+        .setDescription("〔👑 Staff〕 Restrito à equipe da Staff. Expulsa membros do servidor.")
         .addUserOption(option => 
             option.setName("membro")
-                .setDescription("Por favor insira o nome do membro a ser banido.")
+                .setDescription("Insira o membro do servidor que deseja expulsar.")
                 .setRequired(true)    
         )
         .addStringOption(option => 
             option.setName("reason")
-                .setDescription("Insira o motivo pelo qual o ban foi aplicado.")
+                .setDescription("Insira o motivo pelo qual esse usuário está sendo expulso do servidor.")
                 .setRequired(true)
-        )
-        .addIntegerOption(option => 
-            option.setName("days")
-                .setDescription("Número de dias de mensagens a serem excluídas, deve estar entre 0 e 7, inclusive. Padrão: '0'")
-                .setRequired(false)
         ),
     
     help: {
         status: "running", // building, running, stopped
-        details: "Esse comando é restrito a Staff da Coders Community. Ele executa o ban de membros desse servidor, quando solicitado."
+        details: "Quando solicitado, o bot expulsará um membro do servidor. Esse comando só pode ser utilizado pela Staff da Coders Community."
     }
 }
