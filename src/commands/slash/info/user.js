@@ -106,7 +106,7 @@ module.exports = {
     builder: new SlashCommandBuilder()
         .setName("user")
         .setDescription("〔❓ Info〕 Retorna algumas informações sobre o usuário mencionado.")
-        .addMentionableOption(option => 
+        .addUserOption(option => 
                 option.setName("membro")
                     .setRequired(true)
                     .setDescription("Insira o usuário que você deseja consultar para Coders Community.")
