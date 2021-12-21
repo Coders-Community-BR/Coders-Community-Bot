@@ -1,7 +1,7 @@
 module.exports = {
     bot_informations: {
         discriminator: "9534",
-        token: "OTIwNDY5MDY3MzE4NTY2OTcy.Ybkznw.mzBNukRX8mWpeFU5mj8RRYi2-A4",
+        token: "",
         name: "Coders Community",
         id: "920469067318566972"
     },
