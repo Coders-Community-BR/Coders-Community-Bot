@@ -1,11 +1,12 @@
 const { SlashCommandBuilder } = require("@discordjs/builders"),
     { MessageEmbed } = require("discord.js"),
     { Aviso, Alerta } = require("../../../config/client/client-reports"),
-    { guild_informations: { staff_id }, bot_informations: { id } } = require("../../../config/client/client-info"),
+    { guild_informations: { staff_id, punishment_channel }, bot_informations: { id } } = require("../../../config/client/client-info"),
     { Clear, Other } = require("../../../config/client/client-colors")
 
 module.exports = {
     run: (interaction ,bot) => {
+        let Channel = interaction.guild.channels.cache.find(channel => channel.id == punishment_channel)
         const member = interaction.options.get("membro");
         const reason = interaction.options.get("reason").value;
         let days = interaction.options.get("days");
@@ -59,8 +60,9 @@ module.exports = {
                 }
 
                 member.member.ban({ days: days, reason: reason});
-
-                interaction.reply({ embeds: [
+                
+                interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi banido com sucesso.**", ephemeral: true })
+                Channel.send({ embeds: [
                     new MessageEmbed()
                         .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                         .setColor(Other.MediumBlue)
@@ -69,11 +71,9 @@ module.exports = {
                         .setTimestamp()
                         .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\` \n> **Dias de Mensagens Apagadas:** \`${days}\``)
                         .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))                    
-                ], ephemeral: false })
+                ] })
             }
         }
-
-        // interaction.reply({ content: "Manutenção", ephemeral: true });
     },
     
     builder: new SlashCommandBuilder()
@@ -96,7 +96,7 @@ module.exports = {
         ),
     
     help: {
-        status: "building", // building, running, stopped
+        status: "running", // building, running, stopped
         details: "Esse comando é restrito a Staff da Coders Community. Ele executa o ban de membros desse servidor, quando solicitado."
     }
 }

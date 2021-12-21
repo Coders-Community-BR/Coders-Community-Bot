@@ -43,7 +43,7 @@ module.exports = {
                 .setThumbnail("https://www.tradeview.my/images/easyblog_articles/220/b2ap3_large_report.jpg")
                 .setDescription("> **Individuo reportado:** ` " + Moption + " `\n> **Comportamento:** ` " + Soption + " `\n\n```" + SOoption + "```")
                 .setFooter("Report efetuado por " + interaction.user.username, interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
-        ], ephemeral: true  });
+        ] });
 
     },
     
