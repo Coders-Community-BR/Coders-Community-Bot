@@ -12,7 +12,7 @@ module.exports.run = (message, bot) => {
     //console.log(message.author.id);
 
     if (Mention) {
-        if (message.channel.id == "830511022493532172") return;
+        if (message.channel.id == "830511022493532172" || message.channel.id == "830582009994018846") return;
         if (staff_id.includes(message.author.id)) {
             if (Mention.username == bot.user.username) {
                 message.reply({ embeds: [
