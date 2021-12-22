@@ -65,4 +65,11 @@ readdir(dir_select_menus, (err, files) => {
     })
 });
 
+/*
+bot.on("guildMemberAdd", (member) => {
+    member.user.username
+})
+*/
+
+
 bot.login(token)

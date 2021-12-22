@@ -12,7 +12,11 @@ module.exports = {
         able_channels_id: ["830575355013627972", "830492002038448149", "847977503306154044"],
         sugest_channels: ["829926184686190623", "921170359955386449"],
         staff_channel: "830575355013627972",
-        punishment_channel: "919654990488952864"
+        punishment_channel: "919654990488952864",
+        welcome_channel: "829921221142380548",
+        rules_channel: "829922781910925323",
+        register_channel: "830935006565892146",
+        guide_channel: "829922868351205417"         
     },
     owner_informations: {
         discriminator: "2655",

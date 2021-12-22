@@ -5,6 +5,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders"),
 module.exports = {
     run: (interaction, bot) => {
         let topic = interaction.options.get("topic").value;
+        let space = " ";
 
         let info_slash_commands = [];
         let owner_slash_commands = [];
@@ -77,7 +78,7 @@ module.exports = {
                     .setColor(Clear.Orange)
                     .setTitle("❓ Comandos de Barra --> Info")
                     .setThumbnail("https://i.pinimg.com/originals/b6/a3/d1/b6a3d158ddc3edf48da43fcf6ca75237.gif")
-                    .setDescription("```📀NOME              🔨STATUS\n" + `${info_slash_commands.map(command => `/${command.builder.name}                ${command.help.status}` ).join("\n")}` + "```")
+                    .setDescription("```📀NOME              🔨STATUS\n" + `${info_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
                     .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
             ], ephemeral: true, components: [selected_info] });
         }
@@ -95,7 +96,7 @@ module.exports = {
                     .setColor(Clear.Blue)
                     .setTitle("🔒 Comandos de Barra --> Owner")
                     .setThumbnail("https://i.pinimg.com/originals/ef/d8/68/efd86898401b7d5c942ff1739c6d894a.gif")
-                    .setDescription("```📀NOME              🔨STATUS\n" + `${owner_slash_commands.map(command => `/${command.builder.name}               ${command.help.status}` ).join("\n")}` + "```")
+                    .setDescription("```📀NOME              🔨STATUS\n" + `${owner_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
                     .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
             ], ephemeral: true, components: [selected_owner] });
         }
@@ -113,7 +114,7 @@ module.exports = {
                     .setColor(Clear.Blue)
                     .setTitle("🧾 Comandos de Barra --> Support")
                     .setThumbnail("https://i.pinimg.com/originals/ef/d8/68/efd86898401b7d5c942ff1739c6d894a.gif")
-                    .setDescription("```📀NOME              🔨STATUS\n" + `${support_slash_commands.map(command => `/${command.builder.name}               ${command.help.status}` ).join("\n")}` + "```")
+                    .setDescription("```📀NOME              🔨STATUS\n" + `${support_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
                     .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
             ], ephemeral: true, components: [selected_support] });
         }
@@ -131,7 +132,7 @@ module.exports = {
                     .setColor(Clear.Blue)
                     .setTitle("👑 Comandos de Barra --> Staff")
                     .setThumbnail("https://i.imgur.com/5KvMmNg.gif")
-                    .setDescription("```📀NOME              🔨STATUS\n" + `${staff_slash_commands.map(command => `/${command.builder.name}                 ${command.help.status}` ).join("\n")}` + "```")
+                    .setDescription("```📀NOME              🔨STATUS\n" + `${staff_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
             ], ephemeral: true, components: [selected_staff] });
         }
     },
