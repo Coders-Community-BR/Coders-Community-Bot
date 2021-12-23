@@ -1,3 +1,4 @@
+require("dotenv").config();
 const bot = require("./config/client/client"),
     { bot_informations: { token } } = require("./config/client/client-info"),
     { readdir } = require("fs"),
@@ -64,12 +65,5 @@ readdir(dir_select_menus, (err, files) => {
         bot.select_menus.set(Custom_Id, { Custom_Id, run })
     })
 });
-
-/*
-bot.on("guildMemberAdd", (member) => {
-    member.user.username
-})
-*/
-
 
 bot.login(token)
