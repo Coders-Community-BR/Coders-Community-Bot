@@ -55,9 +55,9 @@ module.exports = {
                     ], ephemeral: true });
                 }
 
-                await member.member.kick({ reason: reason });
+                await member.member.kick({ reason: reason }).then(() => console.log("│ INFO │ Novo usuário expulso. User: " + member.user.username));
 
-                interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi expulso com sucesso.**", ephemeral: true })
+                interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi expulso com sucesso.**", ephemeral: true });
                 Channel.send({ embeds: [
                     new MessageEmbed()
                         .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
@@ -67,7 +67,7 @@ module.exports = {
                         .setTimestamp()
                         .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\``)
                         .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))                    
-                ] });
+                ] }).catch(console.error);
             }
         }
     },

@@ -7,7 +7,7 @@ module.exports.run = (message, bot) => {
     const Mention = message.mentions.users.first();
 
     if (message.author.bot) return;
-    if (message.channel.type == "DM") return message.reply("**❌ Ainda não suporto mensagens comuns envidas na minha DM.**");
+    if (message.channel.type == "DM") return;
 
     //console.log(message.author.id);
 
@@ -47,8 +47,8 @@ module.exports.run = (message, bot) => {
     }
 
     if (sugest_channels.includes(message.channel.id)) {
-        message.react("👍")
-        message.react("👎")
+        message.react("👍").catch(console.error);
+        message.react("👎").catch(console.error);
     }
 
 }

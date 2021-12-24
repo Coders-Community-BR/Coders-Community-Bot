@@ -59,7 +59,7 @@ module.exports = {
                     ], ephemeral: true });
                 }
 
-                await member.member.ban({ days: days, reason: reason});
+                await member.member.ban({ days: days, reason: reason}).then(() => console.log("│ INFO │ Novo usuário banido! User: " + member.user.username)).catch(console.error)
                 
                 interaction.reply({ content: "**💀 Ação Efetuada. Membro** `" + member.user.username + "` **foi banido com sucesso.**", ephemeral: true })
                 Channel.send({ embeds: [
@@ -71,7 +71,7 @@ module.exports = {
                         .setTimestamp()
                         .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\` \n> **Dias de Mensagens Apagadas:** \`${days}\``)
                         .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))                    
-                ] });
+                ] }).catch(console.error);
             }
         }
     },

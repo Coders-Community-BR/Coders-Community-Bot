@@ -8,7 +8,7 @@ module.exports.run = (member, bot) => {
             new MessageEmbed()
                 .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setColor("RANDOM")
-                .setTitle(`👋 Seja Bem Vindo ${member.user.username}!`)
+                .setTitle(`👋 Seja Bem Vindo(a) ${member.user.username}!`)
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setDescription(`**Antes de continuar, consulte os canais:**\n🧾 _**Regras:**_ ${member.guild.channels.cache.get(rules_channel)}\n📖 _**Registre-se:**_ ${member.guild.channels.cache.get(register_channel)}\n🔎 _**Guia de Canais:**_ ${member.guild.channels.cache.get(guide_channel)}`)
                 .setFooter("Sistema de Recepção", `https://cdn.discordapp.com/icons/${member.guild.id}/${member.guild.icon}.png`)

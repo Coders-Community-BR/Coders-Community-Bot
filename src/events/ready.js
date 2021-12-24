@@ -5,10 +5,10 @@ module.exports.run = (bot) => {
     console.log("│ GOOD │ Estou à disposição para Coders Community!");
 
     if (status == true) {
-        console.log("│ GOOD │ Conexão com o banco de dados efetuada.")
+        console.log("│ GOOD │ O Banco de Dados pode ser usado durante essa inicialização.")
     }
     if (status == false) {
-        console.log("│ INFO │ Essa inicialização não utilizou o banco de dados.")
+        console.log("│ INFO │ O Banco de Dados não pode ser usado durante essa inicialização.")
     }
 
     const guild = bot.guilds.cache.get(id)

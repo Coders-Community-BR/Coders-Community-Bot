@@ -9,7 +9,7 @@ module.exports = {
         const quantidade = interaction.options.get("quantidade").value;
 
         if (!staff_id.includes(interaction.user.id)) {
-            return await interaction.reply({ embeds: [
+            return interaction.reply({ embeds: [
                 new MessageEmbed()
                     .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                     .setColor(Clear.Red)
@@ -20,7 +20,7 @@ module.exports = {
             ], ephemeral: true });
         } else {
             if (quantidade > 100 || quantidade < 1) {
-                return await interaction.reply({ embeds: [
+                return interaction.reply({ embeds: [
                     new MessageEmbed()
                         .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                         .setColor(Clear.Yellow)
@@ -33,7 +33,7 @@ module.exports = {
             
             await interaction.channel.bulkDelete(quantidade).then(() => "│ GOOD │ Cerca de " + quantidade + " de mensagens foram apagadas por '" + interaction.user.username + "'.").catch(console.error)
 
-            await interaction.reply({ embeds: [
+            interaction.reply({ embeds: [
                 new MessageEmbed()
                     .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                     .setColor(Other.MediumBlue)
