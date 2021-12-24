@@ -11,11 +11,13 @@ module.exports = {
         let owner_slash_commands = [];
         let support_slash_commands = [];
         let staff_slash_commands = [];
+        let helpers_slash_commands = [];
 
         let info_options = [];
         let owner_options = [];
         let support_options = [];
         let staff_options = [];
+        let helpers_options =[];
 
         bot.slash_commands.forEach(slash_command => {
             if (slash_command.builder.description.startsWith("〔❓ Info〕")) {
@@ -29,6 +31,9 @@ module.exports = {
             }
             if (slash_command.builder.description.startsWith("〔👑 Staff〕")) {
                 staff_slash_commands.push(slash_command)
+            }
+            if (slash_command.builder.description.startsWith("〔🤝 Helpers〕")) {
+                helpers_slash_commands.push(slash_command)
             }
         });
 
@@ -56,6 +61,13 @@ module.exports = {
             }
             if (slash_command.builder.description.startsWith("〔👑 Staff〕")) {
                 staff_options.push({
+                    label: slash_command.builder.name,
+                    description: slash_command.builder.description,
+                    value: slash_command.builder.name + "_id"
+                })
+            }
+            if (slash_command.builder.description.startsWith("〔🤝 Helpers〕")) {
+                helpers_options.push({
                     label: slash_command.builder.name,
                     description: slash_command.builder.description,
                     value: slash_command.builder.name + "_id"
@@ -135,6 +147,23 @@ module.exports = {
                     .setDescription("```📀NOME              🔨STATUS\n" + `${staff_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
             ], ephemeral: true, components: [selected_staff] });
         }
+        if (topic == "helpers") {
+            const selected_helpers = new MessageActionRow()
+                .addComponents(
+                    new MessageSelectMenu()
+                        .setCustomId("selected_helpers")
+                        .setPlaceholder("Ver Comandos Detalhadamente")
+                        .addOptions(helpers_options)
+                );
+            interaction.reply({ embeds: [
+                new MessageEmbed()
+                    .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
+                    .setColor(Clear.Blue)
+                    .setTitle("🤝 Comandos de Barra --> Helpers")
+                    .setThumbnail("https://cdn.dribbble.com/users/31818/screenshots/2617464/dribbbb.gif")
+                    .setDescription("```📀NOME              🔨STATUS\n" + `${helpers_slash_commands.map(command => `/${command.builder.name}${space.repeat(17 - (command.builder.name.length - 4))}${command.help.status}` ).join("\n")}` + "```")
+            ], ephemeral: true, components: [selected_helpers] });
+        }
     },
     
     builder: new SlashCommandBuilder()
@@ -148,6 +177,7 @@ module.exports = {
                 .addChoice("〔🔒 Owner〕", "owner")
                 .addChoice("〔🧾 Support〕", "support")
                 .addChoice("〔👑 Staff〕", "staff")
+                .addChoice("〔🤝 Helpers〕", "helpers")
         ),
     
     help: {

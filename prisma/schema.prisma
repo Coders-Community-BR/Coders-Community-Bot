@@ -17,3 +17,11 @@ model Vips {
   guild_id String
   vips Json?
 }
+
+model Helpers {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  guild_id String
+  helpers Json?
+}
