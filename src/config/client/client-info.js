@@ -16,7 +16,8 @@ module.exports = {
         welcome_channel: "829921221142380548",
         rules_channel: "829922781910925323",
         register_channel: "830935006565892146",
-        guide_channel: "829922868351205417"         
+        guide_channel: "829922868351205417",
+        logs_channel: "924011607376408576" 
     },
     owner_informations: {
         discriminator: "2655",

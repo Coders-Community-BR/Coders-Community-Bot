@@ -1,5 +1,7 @@
 const { guild_informations: { id } } = require("../config/client/client-info"),
-    { status, class_data } = require("../database/data")
+    { logs } = require("../config/components/logs"),
+    { status } = require("../database/data");
+
 
 module.exports.run = (bot) => {
     console.log("│ GOOD │ Estou à disposição para Coders Community!");
@@ -10,6 +12,15 @@ module.exports.run = (bot) => {
     if (status == false) {
         console.log("│ INFO │ O Banco de Dados não pode ser usado durante essa inicialização.")
     }
+
+    logs(
+    {
+        name: "'Start'",
+        color: "GREEN"
+    }, 
+    "`Iniciou o Bot`",
+    bot
+    )
 
     const guild = bot.guilds.cache.get(id)
 
