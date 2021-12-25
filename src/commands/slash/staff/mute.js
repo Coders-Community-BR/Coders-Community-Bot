@@ -54,10 +54,10 @@ module.exports = {
                 new MessageEmbed()
                     .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                     .setColor(Other.MediumBlue)
-                    .setTitle("🚫 Novo Usuário Mutado")
+                    .setTitle("🔇 Novo Usuário Mutado")
                     .setThumbnail(member.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
                     .setTimestamp()
-                    .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\``)
+                    .setDescription(`> **Usuário:** \`${member.user.username}\` \n> **Razão:** \`${reason}\` \n> **Horas de Mute:** \`${time}\``)
                     .setFooter("Solicitado por " + interaction.user.username,interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))   
             ] });
         }).catch(console.error);
