@@ -2,7 +2,7 @@
   "name": "coders-community",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "index.js",
   "engines": {
     "node": "16.13.1"
   },

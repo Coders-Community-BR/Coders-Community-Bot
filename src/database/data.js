@@ -6,6 +6,10 @@ class Heroku_Postgre {
         this.bot = bot
     }
 
+    getDate(date) {
+        return new Date(date).getDate() === new Date().getDate()
+    }
+
     async consult_helper(guild_id, member, type) {
         const guild = await prisma.helpers.findFirst({
             where: {
@@ -72,6 +76,28 @@ class Heroku_Postgre {
                 helpers: guild.helpers
             }
         });
+    }
+
+    async count_users_votes(guild_id, author) {
+        let i = 0;
+
+        const guild = await prisma.helpers.findFirst({
+            where: {
+                guild_id
+            }
+        });
+
+        Object.keys(guild.helpers).forEach(lang => {
+            Object.keys(guild.helpers[lang]).forEach(id => {
+                if (this.getDate(guild.helpers[lang][id]["day"])) {
+                    if (guild.helpers[lang][id]["users_votes"].includes(author.id)) {
+                        i++
+                    }
+                }
+            })
+        })
+
+        return i;
     }
 };
 
