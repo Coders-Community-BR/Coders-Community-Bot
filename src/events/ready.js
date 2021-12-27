@@ -13,14 +13,14 @@ module.exports.run = (bot) => {
         console.log("│ INFO │ O Banco de Dados não pode ser usado durante essa inicialização.")
     }
 
-    logs(
+    /* logs(
     {
         name: "'Start'",
         color: "GREEN"
     }, 
     "`Iniciou o Bot`",
     bot
-    )
+    ) */
 
     const guild = bot.guilds.cache.get(id)
 

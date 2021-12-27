@@ -54,8 +54,6 @@ module.exports.run = (interaction, bot) => {
 
         if (select_menu) {
             select_menu.run(interaction, bot)
-        } else {
-            console.log("│ ERRO │ Nenhum select_menu foi encontrado para " + customId)
         }
     }
 }
