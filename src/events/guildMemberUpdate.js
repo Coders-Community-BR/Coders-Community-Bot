@@ -10,7 +10,15 @@ async function nickname(oldMember, newMember, bot) {
     if (staff_id.includes(member.user.id)) return;
 
     if (status == true) {
-        if ((await Heroku_Postgre.global_top_helpers_id(id)).includes(member.user.id)) return;
+        if ((await Heroku_Postgre.global_top_helpers_id(id)).includes(member.user.id)) {
+            newMember.nickname.split(" ").forEach(components => {
+                if (components.includes("[") && components.includes("]")) {
+                    if (!newMember.nickname.startsWith("[HPR]")) {
+                        member.setNickname(member.user.username);
+                    }
+                }
+            });
+        }
     }
     
     if (newMember.nickname == null) return;

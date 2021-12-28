@@ -4,13 +4,13 @@ const { MessageEmbed } = require("discord.js"),
 module.exports.run = (member, bot) => {
     const Channel = member.guild.channels.cache.get(welcome_channel)
     try {
-        Channel.send({ embeds:[
+        Channel.send({ content: `${member}`, embeds:[
             new MessageEmbed()
                 .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setColor("RANDOM")
                 .setTitle(`👋 Seja Bem Vindo(a) ${member.user.username}!`)
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
-                .setDescription(`**Antes de continuar ${member}, consulte os canais:**\n🧾 _**Regras:**_ ${member.guild.channels.cache.get(rules_channel)}\n📖 _**Registre-se:**_ ${member.guild.channels.cache.get(register_channel)}\n🔎 _**Guia de Canais:**_ ${member.guild.channels.cache.get(guide_channel)}`)
+                .setDescription(`**Antes de continuar ${member.user.username.toString()}, consulte os canais:**\n🧾 _**Regras:**_ ${member.guild.channels.cache.get(rules_channel)}\n📖 _**Registre-se:**_ ${member.guild.channels.cache.get(register_channel)}\n🔎 _**Guia de Canais:**_ ${member.guild.channels.cache.get(guide_channel)}`)
                 .setFooter("Sistema de Recepção", `https://cdn.discordapp.com/icons/${member.guild.id}/${member.guild.icon}.png`)
                 .setTimestamp()
         ] });

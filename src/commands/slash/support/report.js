@@ -1,10 +1,15 @@
 const { SlashCommandBuilder } = require("@discordjs/builders"),
     { MessageEmbed } = require("discord.js"),
     { Clear } = require("../../../config/client/client-colors"),
-    { guild_informations: { staff_channel } } = require("../../../config/client/client-info")
+    { guild_informations: { staff_channel, Staff_Roles } } = require("../../../config/client/client-info")
 
 module.exports = {
-    run: (interaction ,bot) => {
+    run: async (interaction ,bot) => {
+        let DONO = await interaction.guild.roles.fetch(Staff_Roles.DONO)
+        let ADM = await interaction.guild.roles.fetch(Staff_Roles.ADM)
+        let MOD = await interaction.guild.roles.fetch(Staff_Roles.MOD)
+        let SUP = await interaction.guild.roles.fetch(Staff_Roles.SUP)
+
         let Channel = interaction.guild.channels.cache.find(channel => channel.id == staff_channel)
         let SOoption = interaction.options.get("problema").value;
         let Moption = interaction.options.get("membro");
@@ -34,7 +39,7 @@ module.exports = {
                 .setFooter("Report efetuado por " + interaction.user.username, interaction.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
         ], ephemeral: true  });
 
-        Channel.send({ embeds: [
+        Channel.send({ content: `${DONO} ${ADM} ${MOD} ${SUP}`, embeds: [
             new MessageEmbed()
                 .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setColor(Clear.Purple)

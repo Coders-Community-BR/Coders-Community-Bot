@@ -14,7 +14,7 @@ module.exports = {
             return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" });
         }
 
-        const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel)
+        // const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel)
         const Heroku_Postgre = new class_data(bot)
         let total_channel_helpers = [];
         let channel_helpers = [];
@@ -43,6 +43,15 @@ module.exports = {
                                 description: "Helper " + interaction.channel.name.split("》")[1] + " da Coders Community",
                                 value: user.user.id
                             });
+                        }
+                        if (interaction.channel.name.split("》")[1] == "sistemas-operacionais") {
+                            if (role_name.toLowerCase().split("- ")[1] == "os") {
+                                return total_channel_helpers.push({
+                                    label: "🤝 Helper - " + user.user.username,
+                                    description: "Helper " + interaction.channel.name.split("》")[1] + " da Coders Community",
+                                    value: user.user.id
+                                });
+                            }
                         }
                     } else {
                         return;
@@ -86,8 +95,8 @@ module.exports = {
 
             const next_button = new MessageButton()
                 .setCustomId("next")
-                .setDisabled(false)
-                .setStyle("PRIMARY")
+                .setDisabled(select_menus.length > 1 ? false : true)
+                .setStyle(select_menus.length > 1 ? "PRIMARY" : "SECONDARY")
                 .setLabel("Próximo")
 
             if (!select_menus?.length) {
@@ -164,7 +173,7 @@ module.exports = {
                         //collected.deferUpdate()
                     }
 
-                    const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
+                    /* const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
                     if (relation.WIN_HELPERS.length) {
                         relation.WIN_HELPERS.forEach(async helper => {
                             const data_helper = await interaction.guild.members.fetch(helper.id);
@@ -193,7 +202,7 @@ module.exports = {
                                 .setTitle("<a:peepocry:854890050541977621> " + helper.username + " foi Substituído!")
                                 .setTimestamp()
                                 .setThumbnail(data_helper.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
-                                .setDescription(`> ${data_helper} você acabou de sair no pódio dos **top 3 helpers** da linguagem **${helper.language}**.\n> Os cargos personalizados infelizmente foram **removidos**, consulte mais informações em \`/profile\`\n> Se esforce ainda mais para receber tudo novamente!`)
+                                .setDescription(`> ${data_helper} você acabou de sair no pódio dos **top 3 helpers** da linguagem **${helper.language}**.\n> O cargo personalizado infelizmente foi **removido**, consulte mais informações em \`/profile\`\n> Se esforce ainda mais para receber tudo novamente!`)
                                 .setFooter("Informações para " + helper.username, data_helper.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                             
                             await data_helper.roles.remove(top_helper_role).catch(console.error);
@@ -202,7 +211,7 @@ module.exports = {
 
                             Chennel_Helper_Logs.send({ content: "" + data_helper + "", embeds: [Lose_Helper_Embed] });
                         });
-                    }
+                    } */
                     return 
                 }
             });
@@ -313,7 +322,7 @@ module.exports = {
     },
 
     builder: new SlashCommandBuilder()
-        .setName("helper")
+        .setName("vote")
         .setDescription("〔🤝 Helpers〕 Selecione um helper de uma respectiva categoria e o dê um upvote ou downvote."),
 
     help: {
