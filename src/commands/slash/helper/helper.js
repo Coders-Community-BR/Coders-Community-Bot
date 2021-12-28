@@ -2,7 +2,8 @@ const { SlashCommandBuilder, time } = require("@discordjs/builders"),
     { MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = require("discord.js"),
     { guild_informations: { helper_channels_id, votes_user_limit, votes_guild_limit, logs_helper_channel, top_helper_role } } = require("../../../config/client/client-info"),
     { Clear } = require("../../../config/client/client-colors"),
-    { status, class_data } = require("../../../database/data");
+    { status, class_data } = require("../../../database/data"),
+    wait = require('util').promisify(setTimeout);
 
 
 module.exports = {
@@ -13,7 +14,6 @@ module.exports = {
         if (status == false) {
             return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" });
         }
-
         // const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel)
         const Heroku_Postgre = new class_data(bot)
         let total_channel_helpers = [];
@@ -149,8 +149,16 @@ module.exports = {
                     });
                     //collected.deferUpdate()
                 }
-                if (["upvote", "downvote"].includes(collected.customId)) {       
+                if (["upvote", "downvote", "return"].includes(collected.customId)) {
+                    if (collected.customId === "return") {
+                        await interaction.editReply({ content: "<:uh:845331981940424764> **Clicou errado né...**", embeds: [], components: [] });
+                        await wait(1000)
+                        await interaction.editReply({
+                            embeds: [embed], ephemeral: true, components: [select_row, button_row]
+                        });
+                    }
                     if (collected.customId === "upvote") {
+                        await interaction.editReply({ content: "<:repeat:845331987371393044> **Mais um momento...**", embeds: [], components: [] });
                         let upvotes = await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "UpVotes")
                         let users_votes = (await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes"))
                         users_votes.push(interaction.user.id)
@@ -162,6 +170,7 @@ module.exports = {
                         //collected.deferUpdate()
                     }
                     if (collected.customId === "downvote") {
+                        await interaction.editReply({ content: "<:repeat:845331987371393044> **Mais um momento...**", embeds: [], components: [] });
                         let downvotes = await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "DownVotes")
                         let users_votes = (await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes"))
                         users_votes.push(interaction.user.id)
@@ -173,7 +182,8 @@ module.exports = {
                         //collected.deferUpdate()
                     }
 
-                    /* const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
+                    const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
+                    /* 
                     if (relation.WIN_HELPERS.length) {
                         relation.WIN_HELPERS.forEach(async helper => {
                             const data_helper = await interaction.guild.members.fetch(helper.id);
@@ -218,7 +228,14 @@ module.exports = {
 
             select_menu_collector.on("collect", async (collected) => {
                 collected.deferUpdate()
+                await interaction.editReply({ content: "<:repeat:845331987371393044> **Aguarde um instante...**", embeds: [], components: [] })
                 user = await interaction.guild.members.fetch(collected.values[0]);
+
+                const return_button = new MessageButton()
+                    .setCustomId("return")
+                    .setDisabled(false)
+                    .setStyle("PRIMARY")
+                    .setLabel("<< Voltar")
 
                 const upvote_button = new MessageButton()
                     .setCustomId("upvote")
@@ -233,7 +250,7 @@ module.exports = {
                     .setStyle("DANGER")
 
                 const button_row = new MessageActionRow()
-                    .setComponents(upvote_button, downvote_button)
+                    .setComponents(return_button, upvote_button, downvote_button)
 
                 const count_votes = await Heroku_Postgre.count_users_votes(interaction.guild.id, interaction.user)
 

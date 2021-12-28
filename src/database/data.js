@@ -129,20 +129,34 @@ class Heroku_Postgre {
         top_helpers.forEach(async (helper, index) => {
             if ([0, 1, 2].includes(index)) {
                 if (helper.top_helper === false) {
+
+                    if (helper.UpVotes < helper.DownVotes || helper.UpVotes === 0) return;
+
                     const member = {user: { id: helper.id }};
                     relation.WIN_HELPERS.push(helper)
                     await this.update_helper(guild_id, member, type, "top_helper" , true)
+
+                    top_helpers[index].top_helper = true
                 }
             } else {
-                if (helper.top_helper === true) {
+                if (helper.top_helper === true || helper.UpVotes < helper.DownVotes) {
+
                     const member = {user: { id: helper.id }};
                     relation.LOSE_HELPES.push(helper)
                     await this.update_helper(guild_id, member, type, "top_helper", false)
+
+                    top_helpers[index].top_helper = false
                 }
             }
         });
         relation.TOP_HELPERS = top_helpers
         relation.TOP_3_HELPERS = top_helpers.slice(0, 3)
+        
+        for (let index = 0; index < relation.TOP_3_HELPERS.length; index++) {
+            const element = relation.TOP_3_HELPERS[index];
+            
+            if (!element.top_helper) relation.TOP_3_HELPERS.splice(index, 1);
+        }
 
         return relation;
     }
@@ -168,6 +182,31 @@ class Heroku_Postgre {
         }
 
         return new_top_helpers;
+    }
+
+    async global_top_helpers_json(guild_id, user_id) {
+        let top_helpers_json = [];
+        
+        const guild = await prisma.helpers.findFirst({
+            where: {
+                guild_id
+            }
+        });
+
+        let i = Object.keys(guild.helpers)
+
+        for (let index = 0; index < i.length; index++) {
+            const element = i[index];
+            const helpers = await this.top_helper(guild_id, element)
+            for (let value = 0; value < helpers.TOP_HELPERS.length; value++) {
+                const data = helpers.TOP_HELPERS[value];
+                if (data.top_helper === true && data.id == user_id) {
+                    top_helpers_json.push(data)
+                }
+            }
+        }
+
+        return top_helpers_json;
     }
 };
 
