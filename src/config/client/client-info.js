@@ -20,7 +20,9 @@ module.exports = {
         rules_channel: "829922781910925323",
         register_channel: "830935006565892146",
         guide_channel: "829922868351205417",
-        logs_channel: "924011607376408576" 
+        logs_channel: "924011607376408576",
+        top_helper_role: "",
+        logs_helper_channel: ""
     },
     owner_informations: {
         discriminator: "2655",

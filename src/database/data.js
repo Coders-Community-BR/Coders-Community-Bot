@@ -10,6 +10,14 @@ class Heroku_Postgre {
         return new Date(date).getDate() === new Date().getDate()
     }
 
+    getTopHelpers(array = [], limit = array.length) {
+        return array.sort((a, b) => {
+            if ((a.UpVotes - a.DownVotes) > (b.UpVotes - b.DownVotes)) return -1;
+            if ((a.UpVotes - a.DownVotes) < (b.UpVotes - b.DownVotes)) return 1;
+            return 0
+        }).slice(0, limit);
+    }
+
     async consult_helper(guild_id, member, type) {
         const guild = await prisma.helpers.findFirst({
             where: {
@@ -98,6 +106,68 @@ class Heroku_Postgre {
         })
 
         return i;
+    }
+
+    async top_helper(guild_id, type) {
+        const relation = {
+            TOP_HELPERS: [],
+            TOP_3_HELPERS: [],
+            LOSE_HELPES: [],
+            WIN_HELPERS: []
+        }
+
+        const guild = await prisma.helpers.findFirst({
+            where: {
+                guild_id
+            }
+        });
+        
+        let top_helpers = Object.values(guild.helpers[type]);
+
+        top_helpers = this.getTopHelpers(top_helpers)
+
+        top_helpers.forEach(async (helper, index) => {
+            if ([0, 1, 2].includes(index)) {
+                if (helper.top_helper === false) {
+                    const member = {user: { id: helper.id }};
+                    relation.WIN_HELPERS.push(helper)
+                    await this.update_helper(guild_id, member, type, "top_helper" , true)
+                }
+            } else {
+                if (helper.top_helper === true) {
+                    const member = {user: { id: helper.id }};
+                    relation.LOSE_HELPES.push(helper)
+                    await this.update_helper(guild_id, member, type, "top_helper", false)
+                }
+            }
+        });
+        relation.TOP_HELPERS = top_helpers
+        relation.TOP_3_HELPERS = top_helpers.slice(0, 3)
+
+        return relation;
+    }
+
+    async global_top_helpers_id(guild_id) {
+        let new_top_helpers = [];
+        const guild = await prisma.helpers.findFirst({
+            where: {
+                guild_id
+            }
+        });
+
+        let i = Object.keys(guild.helpers)
+
+        for (let index = 0; index < i.length; index++) {
+            const element = i[index];
+            const helpers = await this.top_helper(guild_id, element)
+            for (let value = 0; value < helpers.TOP_3_HELPERS.length; value++) {
+                const data = helpers.TOP_3_HELPERS[value];
+                
+                new_top_helpers.push(data.id)
+            }
+        }
+
+        return new_top_helpers;
     }
 };
 

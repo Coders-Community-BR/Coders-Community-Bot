@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, time } = require("@discordjs/builders"),
     { MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = require("discord.js"),
-    { guild_informations: { helper_channels_id, votes_user_limit, votes_guild_limit } } = require("../../../config/client/client-info"),
+    { guild_informations: { helper_channels_id, votes_user_limit, votes_guild_limit, logs_helper_channel, top_helper_role } } = require("../../../config/client/client-info"),
     { Clear } = require("../../../config/client/client-colors"),
     { status, class_data } = require("../../../database/data");
 
@@ -10,15 +10,17 @@ module.exports = {
 
         await interaction.deferReply({ ephemeral: true });
 
+        if (status == false) {
+            return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" });
+        }
+
+        const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel)
         const Heroku_Postgre = new class_data(bot)
         let total_channel_helpers = [];
         let channel_helpers = [];
         let index = 0;
         let user;
 
-        if (status == false) {
-            return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" })
-        } 
 
         if (!helper_channels_id.includes(interaction.channel.id)) {
             return await interaction.editReply({ content: "**❌ Esse comando não pode ser usado nesse canal. Utilize-o em algum dos chats da categoria** `PRINCIPAIS TECNOLOGIAS`", ephemeral: true })
@@ -88,6 +90,10 @@ module.exports = {
                 .setStyle("PRIMARY")
                 .setLabel("Próximo")
 
+            if (!select_menus?.length) {
+                return interaction.editReply({ content: "**❌ Não existem Helpers cadastrados para essa categoria.**", ephemeral: true })
+            }
+
             const select_row = new MessageActionRow()
                 .setComponents(select_menus[index]);
 
@@ -113,6 +119,7 @@ module.exports = {
             const select_menu_collector = interaction.channel.createMessageComponentCollector({ filter, componentType: "SELECT_MENU", time: 600000, errors: ["time"] });
 
             button_collector.on("collect", async (collected) => {
+                collected.deferUpdate()
                 if (["back", "next"].includes(collected.customId)) {
                     if (collected.customId === "back") {
                         next_button.setDisabled(false).setStyle("PRIMARY");
@@ -131,9 +138,9 @@ module.exports = {
                     await interaction.editReply({
                         ephemeral: true, components: [select_row, button_row]
                     });
-                    collected.deferUpdate()
+                    //collected.deferUpdate()
                 }
-                if (["upvote", "downvote"].includes(collected.customId)) {
+                if (["upvote", "downvote"].includes(collected.customId)) {       
                     if (collected.customId === "upvote") {
                         let upvotes = await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "UpVotes")
                         let users_votes = (await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes"))
@@ -143,8 +150,7 @@ module.exports = {
                         await Heroku_Postgre.update_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes", users_votes)
 
                         interaction.editReply({ embeds: [], content: "✅ **Sua resposta foi enviada com sucesso! Obrigado por avaliar nossos Helpers!**", components: [], ephemeral: true })
-                        collected.deferUpdate()
-                        return;
+                        //collected.deferUpdate()
                     }
                     if (collected.customId === "downvote") {
                         let downvotes = await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "DownVotes")
@@ -155,13 +161,54 @@ module.exports = {
                         await Heroku_Postgre.update_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes", users_votes)
 
                         interaction.editReply({ embeds: [], content: "✅ **Sua resposta foi enviada com sucesso! Obrigado por avaliar nossos Helpers!**", components: [], ephemeral: true })
-                        collected.deferUpdate()
-                        return;
+                        //collected.deferUpdate()
                     }
+
+                    const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
+                    if (relation.WIN_HELPERS.length) {
+                        relation.WIN_HELPERS.forEach(async helper => {
+                            const data_helper = await interaction.guild.members.fetch(helper.id);
+
+                            const Win_Helper_Embed = new MessageEmbed()
+                                .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
+                                .setColor("GREEN")
+                                .setTitle("<a:cc:855063869252567100> Parabéns " + helper.username + "!")
+                                .setTimestamp()
+                                .setThumbnail(data_helper.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
+                                .setDescription(`> ${data_helper} você acabou de entrar no pódio dos **top 3 helpers** da linguagem **${helper.language}**.\n> Você já recebeu o **cargo personalizado** e pode resgatar mais **recompensas** em \`/profile\`\n> Agradecemos imensamente por estar ajudando nossa comunidade.`)
+                                .setFooter("Informações para " + helper.username, data_helper.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
+                            
+                            await data_helper.roles.add(top_helper_role).catch(console.error);
+
+                            Chennel_Helper_Logs.send({ content: "" + data_helper + "", embeds: [Win_Helper_Embed] });
+                        });
+                    }
+                    if (relation.LOSE_HELPES.length) {
+                        relation.LOSE_HELPES.forEach(async helper => {
+                            const data_helper = await interaction.guild.members.fetch(helper.id);
+
+                            const Lose_Helper_Embed = new MessageEmbed()
+                                .setAuthor("Sistema " + bot.user.username, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
+                                .setColor("RED")
+                                .setTitle("<a:peepocry:854890050541977621> " + helper.username + " foi Substituído!")
+                                .setTimestamp()
+                                .setThumbnail(data_helper.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
+                                .setDescription(`> ${data_helper} você acabou de sair no pódio dos **top 3 helpers** da linguagem **${helper.language}**.\n> Os cargos personalizados infelizmente foram **removidos**, consulte mais informações em \`/profile\`\n> Se esforce ainda mais para receber tudo novamente!`)
+                                .setFooter("Informações para " + helper.username, data_helper.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
+                            
+                            await data_helper.roles.remove(top_helper_role).catch(console.error);
+
+                            // if (data_helper.nickname.includes("[HPR]"))
+
+                            Chennel_Helper_Logs.send({ content: "" + data_helper + "", embeds: [Lose_Helper_Embed] });
+                        });
+                    }
+                    return 
                 }
             });
 
             select_menu_collector.on("collect", async (collected) => {
+                collected.deferUpdate()
                 user = await interaction.guild.members.fetch(collected.values[0]);
 
                 const upvote_button = new MessageButton()
@@ -190,22 +237,28 @@ module.exports = {
                     .setDescription(`> Dê um **UpVote** ou **DownVote** para esse Helper.\n> ${(votes_user_limit - count_votes) == 0 ? "Você não tem Votes restantes para hoje." : "Votes restantes para hoje: `" + (votes_user_limit - count_votes) + "`"} \n\n **Obs: ** Botões desabilitados significam que seu limíte de Votes diário já foi atingido, você já votou nesse helper hoje ou você está votando em si mesmo.`)
                     .setFooter("Solicitado por " + interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
 
+                if (count_votes === 5) {
+                    await interaction.editReply({
+                        embeds: [user_embed], ephemeral: true, components: [button_row]
+                    });
+                    //collected.deferUpdate();
+                    return;
+                }
                 if (interaction.user.id == user.user.id) {
                     await interaction.editReply({
                         embeds: [user_embed], ephemeral: true, components: [button_row]
                     });
-                    collected.deferUpdate();
+                    //collected.deferUpdate();
                     return;
                 }
                 if (await Heroku_Postgre.consult_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1])) {
-                    // Verificar se o usuário já completou o limite diário de up e down votes
                     // username, id, top_helper, UpVotes, DownVotes, day, users_votes, language
                     if ((await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes")).length == votes_guild_limit) {
                         if (Heroku_Postgre.getDate(await Heroku_Postgre.component_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "day"))) {
                             await interaction.editReply({
                                 embeds: [user_embed], ephemeral: true, components: [button_row]
                             });
-                            collected.deferUpdate()
+                            //collected.deferUpdate()
                         } else {
                             await Heroku_Postgre.update_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "day", Date.now())
                             await Heroku_Postgre.update_helper(interaction.guild.id, user, interaction.channel.name.split("》")[1], "users_votes", [])
@@ -214,7 +267,7 @@ module.exports = {
                             await interaction.editReply({
                                 embeds: [user_embed], ephemeral: true, components: [button_row]
                             });
-                            collected.deferUpdate()
+                            //collected.deferUpdate()
                         }
                     }
 
@@ -228,12 +281,12 @@ module.exports = {
                                 await interaction.editReply({
                                     embeds: [user_embed], ephemeral: true, components: [button_row]
                                 });
-                                collected.deferUpdate()
+                                //collected.deferUpdate()
                             } else {
                                 await interaction.editReply({
                                     embeds: [user_embed], ephemeral: true, components: [button_row]
                                 });
-                                collected.deferUpdate()
+                                //collected.deferUpdate()
                             }
                         } else {
                             upvote_button.setDisabled(false)
@@ -241,7 +294,7 @@ module.exports = {
                             await interaction.editReply({
                                 embeds: [user_embed], ephemeral: true, components: [button_row]
                             });
-                            collected.deferUpdate()
+                            //collected.deferUpdate()
                         }
                         return;
                     }
@@ -252,7 +305,7 @@ module.exports = {
                 await interaction.editReply({
                     embeds: [user_embed], ephemeral: true, components: [button_row]
                 });
-                collected.deferUpdate()
+                //collected.deferUpdate()
             });
         }
         
