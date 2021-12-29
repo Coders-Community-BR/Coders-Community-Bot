@@ -14,8 +14,9 @@ module.exports = {
         if (status == false) {
             return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" });
         }
-        // const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel)
-        const Heroku_Postgre = new class_data(bot)
+
+        // const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel);
+        const Heroku_Postgre = new class_data(bot);
         let total_channel_helpers = [];
         let channel_helpers = [];
         let index = 0;
@@ -183,8 +184,8 @@ module.exports = {
                     }
 
                     const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
-                    /* 
-                    if (relation.WIN_HELPERS.length) {
+                    //
+                    /* if (relation.WIN_HELPERS.length) {
                         relation.WIN_HELPERS.forEach(async helper => {
                             const data_helper = await interaction.guild.members.fetch(helper.id);
 
@@ -199,7 +200,7 @@ module.exports = {
                             
                             await data_helper.roles.add(top_helper_role).catch(console.error);
 
-                            Chennel_Helper_Logs.send({ content: "" + data_helper + "", embeds: [Win_Helper_Embed] });
+                            Chennel_Helper_Logs.send({ content: `${data_helper}`, embeds: [Win_Helper_Embed] });
                         });
                     }
                     if (relation.LOSE_HELPES.length) {
@@ -217,11 +218,14 @@ module.exports = {
                             
                             await data_helper.roles.remove(top_helper_role).catch(console.error);
 
-                            // if (data_helper.nickname.includes("[HPR]"))
+                            if (data_helper.nickname.includes("[") && data_helper.nickname.includes("]")) {
+                                data_helper.setNickname(data_helper.user.username)
+                            }
 
-                            Chennel_Helper_Logs.send({ content: "" + data_helper + "", embeds: [Lose_Helper_Embed] });
+                            Chennel_Helper_Logs.send({ content: `${data_helper}` , embeds: [Lose_Helper_Embed] });
                         });
-                    } */
+                    }  */
+                    //
                     return 
                 }
             });
