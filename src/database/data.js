@@ -208,6 +208,22 @@ class Heroku_Postgre {
 
         return top_helpers_json;
     }
+
+    async db_lang_keys(guild_id) {
+        let LANG_KEYS = [];
+
+        const guild = await prisma.helpers.findFirst({
+            where: {
+                guild_id
+            }
+        });
+
+        Object.keys(guild.helpers).forEach(lang => {
+            LANG_KEYS.push(lang)
+        });
+
+        return LANG_KEYS;
+    }
 };
 
 module.exports = {
