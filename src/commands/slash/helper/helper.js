@@ -15,7 +15,7 @@ module.exports = {
             return interaction.editReply({ content: "**❌ Essa Inicialização não utilizou o Banco de Dados, não posso utilizar esse comando.**" });
         }
 
-        // const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel);
+        const Chennel_Helper_Logs = await interaction.guild.channels.fetch(logs_helper_channel);
         const Heroku_Postgre = new class_data(bot);
         let total_channel_helpers = [];
         let channel_helpers = [];
@@ -185,7 +185,7 @@ module.exports = {
 
                     const relation = await Heroku_Postgre.top_helper(interaction.guild.id, interaction.channel.name.split("》")[1]);
                     //
-                    /* if (relation.WIN_HELPERS.length) {
+                    if (relation.WIN_HELPERS.length) {
                         relation.WIN_HELPERS.forEach(async helper => {
                             const data_helper = await interaction.guild.members.fetch(helper.id);
 
@@ -219,14 +219,15 @@ module.exports = {
                             await data_helper.roles.remove(top_helper_role).catch(console.error);
 
                             if (data_helper.nickname.includes("[") && data_helper.nickname.includes("]")) {
+                                if (staff_id.includes(data_helper.user.id)) return;
                                 data_helper.setNickname(data_helper.user.username)
                             }
 
                             Chennel_Helper_Logs.send({ content: `${data_helper}` , embeds: [Lose_Helper_Embed] });
                         });
-                    }  */
+                    }
                     //
-                    return 
+                    return;
                 }
             });
 
@@ -267,7 +268,7 @@ module.exports = {
                     .setDescription(`> Dê um **UpVote** ou **DownVote** para esse Helper.\n> ${(votes_user_limit - count_votes) == 0 ? "Você não tem Votes restantes para hoje." : "Votes restantes para hoje: `" + (votes_user_limit - count_votes) + "`"} \n\n **Obs: ** Botões desabilitados significam que seu limíte de Votes diário já foi atingido, você já votou nesse helper hoje ou você está votando em si mesmo.`)
                     .setFooter("Solicitado por " + interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
 
-                if (count_votes === 5) {
+                if (count_votes === votes_user_limit) {
                     await interaction.editReply({
                         embeds: [user_embed], ephemeral: true, components: [button_row]
                     });
@@ -347,7 +348,7 @@ module.exports = {
         .setDescription("〔🤝 Helpers〕 Selecione um helper de uma respectiva categoria e o dê um upvote ou downvote."),
 
     help: {
-        status: "building", // building, running, stopped
+        status: "running", // building, running, stopped
         details: "Oferece a quem o executa a possibilidade de dar um upvote ou downvote a um helper. Se usado incorretamente, o ban pode ser aplicado."
     }
 }

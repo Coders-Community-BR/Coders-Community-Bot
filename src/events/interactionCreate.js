@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js"),
-    { bot_informations: { name }, owner_informations, guild_informations: { staff_id, able_channels_id } } = require("../config/client/client-info"),
+    { bot_informations: { name }, owner_informations, guild_informations: { staff_id, able_channels_id, helper_channels_id } } = require("../config/client/client-info"),
     { Clear, Other } = require("../config/client/client-colors"),
     { Alerta, Aviso } = require("../config/client/client-reports")
 
@@ -9,7 +9,7 @@ module.exports.run = (interaction, bot) => {
     if (interaction.isCommand()) {
         let slash_command = bot.slash_commands.get(commandName);
 
-        if (!able_channels_id.includes(interaction.channel.id) && !staff_id.includes(interaction.user.id)) return interaction.reply({ embeds: [
+        if (!able_channels_id.includes(interaction.channel.id) && !staff_id.includes(interaction.user.id) && !helper_channels_id.includes(interaction.channel.id)) return interaction.reply({ embeds: [
             new MessageEmbed()
                 .setAuthor("Sistema " + name, bot.user.displayAvatarURL({ dynamic: true, format: "png", size: 1024 }))
                 .setColor(Other.MediumBlue)

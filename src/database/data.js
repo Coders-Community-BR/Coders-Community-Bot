@@ -228,5 +228,5 @@ class Heroku_Postgre {
 
 module.exports = {
     class_data: Heroku_Postgre,
-    status: false
+    status: true
 };

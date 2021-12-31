@@ -3,7 +3,7 @@ const { guild_informations: { staff_id, id } } = require("../config/client/clien
     reg = require("../config/components/top-lang-keys");
     
 function VerifyAdm(newMember) {
-    if (/(?:\[|\<|\(|\{|\:)\s*((?:m\s*o\s*d\s*(?:e\s*r\s*a\s*(?:d|t)\s*o\s*r)?)|(?:a\s*d\s*m\s*(?:i\s*n\s*(?:i\s*s\s*t\s*r\s*a\s*(?:d|t)\s*o\s*r))?)|(?:s\s*u\s*p\s*(?:e\s*r\s*v\s*i\s*s\s*o\s*r))|(?:g\s*m)|(?:s\s*t\s*a\s*f\s*f)|(?:d\s*o\s*n\s*o)|(?:o\s*w\s*n\s*(?:e\s*r)?))\s*(?:\]|\>|\)|\}|\:)/i.test(newMember.nickname) || /\[\s*t\s*o\s*p.*\]/i.test(newMember.nickname)) return newMember.setNickname(newMember.user.username).catch(console.error)
+    if (/(?:\[|\<|\(|\{|\:)\s*((?:m\s*o\s*d\s*(?:e\s*r\s*a\s*(?:d|t)\s*o\s*r)?)|(?:a\s*d\s*m\s*(?:i\s*n\s*(?:i\s*s\s*t\s*r\s*a\s*(?:d|t)\s*o\s*r))?)|(?:s\s*u\s*p\s*(?:e\s*r\s*v\s*i\s*s\s*o\s*r))|(?:g\s*m)|(?:s\s*t\s*a\s*f\s*f)|(?:d\s*o\s*n\s*o)|(?:o\s*w\s*n\s*(?:e\s*r)?))\s*(?:\]|\>|\)|\}|\:)/i.test(newMember.nickname) || /\[\s*t\s*o\s*p.*\]/i.test(newMember.nickname)) return newMember.setNickname(null).catch(console.error)
 }
 
 async function nickname(oldMember, newMember, bot) {
@@ -26,7 +26,7 @@ async function nickname(oldMember, newMember, bot) {
 
         if (verify) return;
         
-        newMember.setNickname(newMember.user.username).catch(console.error);
+        newMember.setNickname(null).catch(console.error);
     } else {
         VerifyAdm(newMember)
     }

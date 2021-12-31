@@ -7,10 +7,10 @@ module.exports.run = (bot) => {
     console.log("│ GOOD │ Estou à disposição para Coders Community!");
 
     if (status == true) {
-        console.log("│ GOOD │ O Banco de Dados pode ser usado durante essa inicialização.")
+        console.log("│ GOOD │ O Banco de Dados pôde ser usado durante essa inicialização.")
     }
     if (status == false) {
-        console.log("│ INFO │ O Banco de Dados não pode ser usado durante essa inicialização.")
+        console.log("│ INFO │ O Banco de Dados não pôde ser usado durante essa inicialização.")
     }
 
     /* logs(
