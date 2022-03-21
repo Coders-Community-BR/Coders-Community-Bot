@@ -87,9 +87,9 @@ module.exports = {
                     .setColor("RANDOM")
                     .setTimestamp()
                     .setThumbnail(member.user.displayAvatarURL({dynamic: true, format: "png", size: 1024}))
-                    .setTitle("🎯 Informações para " + member.user.username)
+                    .setTitle("🎯 Informações para " + member.user.tag)
                     .addFields(
-                        {name: "📋 Nome de Usuário", value: "`" + member.user.username + "`", inline: true},
+                        {name: "📋 Nome de Usuário", value: "`" + member.user.tag + "`", inline: true},
                         {name: "🎫 Nickname", value: "`" + (member.member.nickname !== null ? member.member.nickname : "Sem Apelido" ) + "`", inline: true},
                         {name: "💮 Discriminador", value: "`" + member.user.discriminator + "`", inline: true},
                         {name: "📌 Id de Usuário", value: "`" + member.user.id + "`", inline: true},
